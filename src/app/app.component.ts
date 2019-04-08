@@ -1,31 +1,37 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
+import { Store, select } from "@ngrx/store";
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-root',
+  selector: "app-root",
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <img width="300" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+  <div>
+    <div>
+      <h4>Online Store</h4>
+      <h6><a [routerLink]="['/cart']">Cart: {{(cart | async).length}}</a></h6>
+      <hr />
     </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    <router-outlet></router-outlet>
+  </div>
+  <router-outlet></router-outlet>
   `,
   styles: []
 })
 export class AppComponent {
-  title = 'online-store';
+  title = 'app';
+  constructor(private store: Store<any>) {}
+
+  cart: Observable<Array<any>>
+
+  ngOnInit() {
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    // Add 'implements OnInit' to the class.
+    
+    // here we are not using the subcribe but using the async pipe
+    //So, the "async pipe" does the subscription for us and appends the 
+    //value to our template. So much work in only a few lines of code. Perfect!
+    this.cart = this.store.select('cart')
+
+    // this.cart = this.store.select('cart')
+    //     .subscribe(state => this.cart = state)
+  }
 }
